@@ -4,27 +4,29 @@ using UnityEngine;
 
 public static class MeshGenerator
 {
-    public static MeshData generateTerrainMesh(float[,] heightMap)
+    public static MeshData generateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve meshHeightCurve, int levelDetail)
     {
         int width = heightMap.GetLength(0);
         int height = heightMap.GetLength(1);
+        int simplificationIncrement = (levelDetail == 0? 1:levelDetail * 2);
+        int verticesPerLine = (width - 1) / simplificationIncrement + 1;
         /*these two variables help the map spawns in the middle*/
         float topLeftX = (width - 1) / -2f;
         float topLeftZ = (height - 1) / 2f;
 
-        MeshData meshData = new MeshData(width,height);
+        MeshData meshData = new MeshData(verticesPerLine, verticesPerLine);
         int vertexIndex = 0;
 
-        for (int y = 0; y<height; y++)
+        for (int y = 0; y<height; y+= simplificationIncrement)
         {
-            for (int x = 0; x<width; x++)
+            for (int x = 0; x<width; x+= simplificationIncrement)
             {
-                meshData.vertices[vertexIndex] = new Vector3((topLeftX + (float)x), heightMap[x, y], (topLeftZ - (float)y));
+                meshData.vertices[vertexIndex] = new Vector3((topLeftX + (float)x), meshHeightCurve.Evaluate(heightMap[x, y]) * heightMultiplier, (topLeftZ - (float)y));
                 meshData.UVS[vertexIndex] = new Vector2(x / (float)width, y / (float)height);
                 if(x < width-1 && y < height - 1)
                 {
-                    meshData.addTriangles(vertexIndex, vertexIndex+width+1, vertexIndex+width);
-                    meshData.addTriangles(vertexIndex, vertexIndex + 1, vertexIndex + width + 1);
+                    meshData.addTriangles(vertexIndex, vertexIndex+ verticesPerLine + 1, vertexIndex+ verticesPerLine);
+                    meshData.addTriangles(vertexIndex, vertexIndex + 1, vertexIndex + verticesPerLine + 1);
                 }
 ;               vertexIndex++;
             }

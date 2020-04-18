@@ -6,8 +6,11 @@ public class MapGenerator : MonoBehaviour
 {
     public enum DrawMode{ noiseMap, colormap, Mesh}
     public DrawMode drawMode;
-    public int mapWidth;
-    public int mapHeight;
+    const int mapChunkSize = 241;
+    [Range(0,6)]
+    public int levelOfDetail;
+    //public int mapChunkSize;
+    //public int mapChunkSize;
     public float noiseScale;
 
     public int octave;
@@ -18,23 +21,26 @@ public class MapGenerator : MonoBehaviour
     public int seed;
     public Vector2 offSet;
     public bool autoUpdate;
+
+    public float meshHeight;
+    public AnimationCurve meshHeightCurve;
     //fetch noise map to noise class
 
     public TerrainType[] regions;
     public void generateMap()
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octave, persistent, lacunarity, offSet);
+        float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octave, persistent, lacunarity, offSet);
 
         Color[] colorMap = new Color[noiseMap.Length];
-        for (int y = 0; y < mapHeight; y++) {
-            for(int x = 0; x < mapWidth; x++)
+        for (int y = 0; y < mapChunkSize; y++) {
+            for(int x = 0; x < mapChunkSize; x++)
             {
                 float currentHeight = noiseMap[x, y];
                 for(int i = 0; i < regions.Length; i++)
                 {
                     if(currentHeight <= regions[i].height)
                     {
-                        colorMap[y * mapWidth + x] = regions[i].color;
+                        colorMap[y * mapChunkSize + x] = regions[i].color;
                         break;
                     }
                 }
@@ -48,26 +54,26 @@ public class MapGenerator : MonoBehaviour
             mapDisplay.drawTexture(texture);
         }else if(drawMode == DrawMode.colormap)
         {
-            Texture2D texture = TextureGenerator.textureFromColorMap(colorMap, mapWidth, mapHeight);
+            Texture2D texture = TextureGenerator.textureFromColorMap(colorMap, mapChunkSize, mapChunkSize);
             mapDisplay.drawTexture(texture);
         }else if(drawMode == DrawMode.Mesh)
         {
-            Texture2D texture = TextureGenerator.textureFromColorMap(colorMap, mapWidth, mapHeight);
-            mapDisplay.drawMesh(MeshGenerator.generateTerrainMesh(noiseMap), texture);
+            Texture2D texture = TextureGenerator.textureFromColorMap(colorMap, mapChunkSize, mapChunkSize);
+            mapDisplay.drawMesh(MeshGenerator.generateTerrainMesh(noiseMap, meshHeight, meshHeightCurve, levelOfDetail), texture);
         }
 
     }
 
     private void OnValidate()
-    {
-        if (mapWidth < 1)
+    {/*
+        if (mapChunkSize < 1)
         {
-            mapWidth = 1;
+            //mapChunkSize = 1;
         }
-        if (mapHeight < 1)
+        if (mapChunkSize < 1)
         {
-            mapHeight = 1;
-        }
+            //mapChunkSize = 1;
+        }*/
         if(octave < 1)
         {
             octave = 1;
