@@ -14,12 +14,12 @@ public class MapGeneratorEditor : Editor
         {
             if (mapGenerator.autoUpdate)
             {
-                mapGenerator.generateMap();
+                mapGenerator.DrawMapEditor();
             }
         }
         if (GUILayout.Button("create"))
         {
-            mapGenerator.generateMap();
+            mapGenerator.DrawMapEditor();
         }
     }
 
