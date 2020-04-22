@@ -6,7 +6,8 @@ using System.Threading;
 
 public class MapGenerator : MonoBehaviour
 {
-    public enum DrawMode{ noiseMap, colormap, Mesh}
+    public enum DrawMode { noiseMap, colormap, Mesh }
+    public Noise.NormalizeMode normalizeMode;
     public DrawMode drawMode;
     public const int mapChunkSize = 241;
     [Range(0,6)]
@@ -112,7 +113,7 @@ public class MapGenerator : MonoBehaviour
 
     MapData generateMapData(Vector2 centre)
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octave, persistent, lacunarity, centre + offSet);
+        float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octave, persistent, lacunarity, centre + offSet, normalizeMode);
 
         Color[] colorMap = new Color[noiseMap.Length];
         for (int y = 0; y < mapChunkSize; y++) {
@@ -121,9 +122,12 @@ public class MapGenerator : MonoBehaviour
                 float currentHeight = noiseMap[x, y];
                 for(int i = 0; i < regions.Length; i++)
                 {
-                    if(currentHeight <= regions[i].height)
+                    if(currentHeight >= regions[i].height)
                     {
                         colorMap[y * mapChunkSize + x] = regions[i].color;
+                    }
+                    else
+                    {
                         break;
                     }
                 }

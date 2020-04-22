@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EndlessTerrain : MonoBehaviour
 {
+    const float scale = 5f;
     const float viewerUpdateThresholdDst = 25f;//set a threshold update distance so the map does noy have to update per frame, but instead update when player moves 
     const float sqrViewerUpdateThresholdDst = viewerUpdateThresholdDst * viewerUpdateThresholdDst;
     public LODInfo[] detailLevels;
@@ -17,7 +18,8 @@ public class EndlessTerrain : MonoBehaviour
     int chunkVisibleInViewDst;
 
     Dictionary<Vector2, TerrainBlock> terrainBlockDictionary = new Dictionary<Vector2, TerrainBlock>();
-    List<TerrainBlock> terrainBlocksVisibleListUpdate = new List<TerrainBlock>();
+    static List<TerrainBlock> terrainBlocksVisibleListUpdate = new List<TerrainBlock>();
+
     void Start()
     {
         mapGenerator = FindObjectOfType<MapGenerator>();
@@ -30,7 +32,7 @@ public class EndlessTerrain : MonoBehaviour
 
     private void Update()
     {
-        viewPosition = new Vector2(viewer.position.x, viewer.position.z);
+        viewPosition = new Vector2(viewer.position.x, viewer.position.z) / scale;
         if((viewPositionOld - viewPosition).sqrMagnitude > sqrViewerUpdateThresholdDst) {
             viewPositionOld = viewPosition;//update the previous position for the next calculation
             UpdateVisibleChunks();
@@ -58,10 +60,7 @@ public class EndlessTerrain : MonoBehaviour
                 {
                     //make it visible
                     terrainBlockDictionary[viewedChunkCoor].UpdateTerrainChunk();
-                    if (terrainBlockDictionary[viewedChunkCoor].IsVisible())
-                    {
-                        terrainBlocksVisibleListUpdate.Add(terrainBlockDictionary[viewedChunkCoor]);
-                    }
+
                 }
                 else
                 {
@@ -88,13 +87,14 @@ public class EndlessTerrain : MonoBehaviour
         {
             position = coord * size;
             bounds = new Bounds(position, Vector2.one * size);
-            Vector3 positionV3 = new Vector3(position.x, 0, position.y);
+            Vector3 positionV3 = new Vector3(position.x, 0, position.y) * scale;
             this.detaillevels = detaillevels;
             //meshObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
             meshObject = new GameObject("Terrain Block");
             meshRenderer = meshObject.AddComponent<MeshRenderer>();
             meshFilter = meshObject.AddComponent<MeshFilter>();
             meshObject.transform.position = positionV3;
+            meshObject.transform.localScale = Vector3.one * scale;
             meshRenderer.material = material;
 
             //meshObject.transform.localScale = Vector3.one * size/10f;
@@ -159,6 +159,7 @@ public class EndlessTerrain : MonoBehaviour
                             lodMesh.requestMesh(mapData);
                         }
                     }
+                    terrainBlocksVisibleListUpdate.Add(this);
                 }
                 SetVisible(isVisible);
             }
