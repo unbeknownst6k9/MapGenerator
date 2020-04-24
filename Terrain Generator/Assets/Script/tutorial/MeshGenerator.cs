@@ -68,6 +68,7 @@ public static class MeshGenerator
 ;               //vertexIndex++;
             }
         }
+        meshData.BakeNormals();
         //return meshData for multi-threading so the game doesn't freeze when it loads
         //**we can't create Mesh inside the thread, so you have to do it outside the threading method
         return meshData;
@@ -81,6 +82,7 @@ public class MeshData
     int[] triangles;
     Vector2[] UVS;
     Vector3[] borderVertices;
+    Vector3[] bakedNormals;
     int[] borderTriangles;
 
     int triangleIndex = 0;
@@ -153,19 +155,21 @@ public class MeshData
             int vertexIndexA = borderTriangles[normalTriangleIndex];
             int vertexIndexB = borderTriangles[normalTriangleIndex + 1];
             int vertexIndexC = borderTriangles[normalTriangleIndex + 2];
-
-            Vector3 vertexIndexNormal = surfaceNormalFromIndices(vertexIndexA, vertexIndexB, vertexIndexC);
+            /*fix: by getting rid of the normals for the borders the shading line between each mesh disappear
+             this is because the border triangles are not supposed to be seen, hence, neither should they have normal shade.
+             this fix is temporary for the tutorial ep12*/
+            //Vector3 vertexIndexNormal = surfaceNormalFromIndices(vertexIndexA, vertexIndexB, vertexIndexC);
             if (vertexIndexA >= 0)
             {
-                vertexNormals[vertexIndexA] += vertexIndexNormal;
+                //vertexNormals[vertexIndexA] += vertexIndexNormal;
             }
             if (vertexIndexB >= 0)
             {
-                vertexNormals[vertexIndexB] += vertexIndexNormal;
+                //vertexNormals[vertexIndexB] += vertexIndexNormal;
             }
             if (vertexIndexC >= 0)
             {
-                vertexNormals[vertexIndexC] += vertexIndexNormal;
+                //vertexNormals[vertexIndexC] += vertexIndexNormal;
             }
         }
 
@@ -187,13 +191,18 @@ public class MeshData
         return Vector3.Cross(vectorAB, vectorAC).normalized;
     }
 
+    public void BakeNormals()
+    {
+        bakedNormals = CalculateNormals();
+    }
+
     public Mesh createMesh()
     {
         Mesh mesh = new Mesh();
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.uv = UVS;
-        mesh.normals = CalculateNormals();//this is to adjust the lighting
+        mesh.normals = bakedNormals;//this is to adjust the lighting
 
         return mesh;
     }
