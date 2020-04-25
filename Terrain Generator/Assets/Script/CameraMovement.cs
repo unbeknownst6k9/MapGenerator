@@ -13,7 +13,7 @@ public class CameraMovement : MonoBehaviour
     void Start()
     {
         //camera = gameObject.GetComponent(typeof(Transform));
-        Debug.Log(gameObject.transform.position);
+        //Debug.Log(gameObject.transform.position);
     }
 
     // Update is called once per frame

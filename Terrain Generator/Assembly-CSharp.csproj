@@ -76,6 +76,9 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Subsystem.Registration">
+      <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.Subsystem.Registration.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
@@ -84,6 +87,9 @@
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.AdaptivePerformance">
+      <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.AdaptivePerformance.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
       <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
@@ -94,26 +100,20 @@
     <Reference Include="Unity.Rider.Editor">
       <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.AdaptivePerformance.Editor">
+      <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.AdaptivePerformance.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Tilemap.Editor">
+      <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Tilemap.Editor">
-      <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Subsystem.Registration">
-      <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.Subsystem.Registration.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.AdaptivePerformance">
-      <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.AdaptivePerformance.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.AdaptivePerformance.Editor">
-      <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.AdaptivePerformance.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>D:/Program Files/Unity/2019.2.2f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

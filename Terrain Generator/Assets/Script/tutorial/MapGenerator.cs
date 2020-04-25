@@ -37,7 +37,7 @@ public class MapGenerator : MonoBehaviour
 
     private void Awake()
     {
-        fallOffMap = FallOffGenerator.fallOffMap(mapChunkSize);
+        fallOffMap = FallOffGenerator.fallOffMap(mapChunkSize+2);
     }
 
     public void DrawMapEditor()
@@ -57,7 +57,7 @@ public class MapGenerator : MonoBehaviour
         else if (drawMode == DrawMode.Mesh)
         {
             Texture2D texture = TextureGenerator.textureFromColorMap(mapData.colorMap, mapChunkSize, mapChunkSize);
-            mapDisplay.drawMesh(MeshGenerator.generateTerrainMesh(mapData.heightMap, meshHeight, meshHeightCurve, previewLevelOfDetail), texture);
+            mapDisplay.drawMesh(MeshGenerator.generateTerrainMesh(mapData.heightMap, meshHeight, meshHeightCurve, previewLevelOfDetail, useFallOff), texture);
         }
         else if(drawMode == DrawMode.FallOffMap)
         {
@@ -97,7 +97,7 @@ public class MapGenerator : MonoBehaviour
 
     void meshDataThread(Action<MeshData> callback,int lod, MapData mapData)
     {
-        MeshData meshData = MeshGenerator.generateTerrainMesh(mapData.heightMap, meshHeight, meshHeightCurve, lod);
+        MeshData meshData = MeshGenerator.generateTerrainMesh(mapData.heightMap, meshHeight, meshHeightCurve, lod, useFallOff);
         lock (meshDataThreadInfoQueue)
         {
             meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<MeshData>(callback, meshData));

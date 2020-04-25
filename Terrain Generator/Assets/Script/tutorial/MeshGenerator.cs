@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class MeshGenerator
 {
-    public static MeshData generateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve meshHeightCurve, int levelDetail)
+    public static MeshData generateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve meshHeightCurve, int levelDetail, bool useFallOff)
     {
         AnimationCurve reference = new AnimationCurve(meshHeightCurve.keys);
         int simplificationIncrement = (levelDetail == 0 ? 1 : levelDetail * 2);
@@ -14,12 +14,13 @@ public static class MeshGenerator
         int meshSizeUnsimplifies = borderedSize - 2;
         
         int verticesPerLine = (meshSize - 1) / simplificationIncrement + 1;
-
+        
         /*these two variables help the map spawns in the middle*/
         float topLeftX = (meshSizeUnsimplifies - 1) / -2f;
         float topLeftZ = (meshSizeUnsimplifies - 1) / 2f;
 
         MeshData meshData = new MeshData(verticesPerLine);
+
         int[,] vertexIndicesMap = new int[borderedSize, borderedSize];
         int meshVertexIndex = 0;
         int borderVertexIndex = -1;
@@ -51,8 +52,8 @@ public static class MeshGenerator
                 int vertexIndex = vertexIndicesMap[x, y];
 
                 Vector2 percent = new Vector2((x - simplificationIncrement) / (float)meshSize, (y - simplificationIncrement) / (float)meshSize);
-                float height = reference.Evaluate(heightMap[x, y]) * heightMultiplier;
-                Vector3 vertexPosition = new Vector3((topLeftX + (float)percent.x * meshSizeUnsimplifies), height, (topLeftZ - (float)percent.y * meshSizeUnsimplifies));
+                float height = reference.Evaluate(heightMap[x, y]) * heightMultiplier;//this defines the height of all vertices
+                Vector3 vertexPosition = new Vector3((topLeftX + percent.x * meshSizeUnsimplifies), height, (topLeftZ - percent.y * meshSizeUnsimplifies));
 
                 meshData.addVertex(vertexPosition, percent, vertexIndex);
                 if(x < borderedSize-1 && y < borderedSize - 1)
@@ -158,6 +159,7 @@ public class MeshData
             /*fix: by getting rid of the normals for the borders the shading line between each mesh disappear
              this is because the border triangles are not supposed to be seen, hence, neither should they have normal shade.
              this fix is temporary for the tutorial ep12*/
+            
             //Vector3 vertexIndexNormal = surfaceNormalFromIndices(vertexIndexA, vertexIndexB, vertexIndexC);
             if (vertexIndexA >= 0)
             {
