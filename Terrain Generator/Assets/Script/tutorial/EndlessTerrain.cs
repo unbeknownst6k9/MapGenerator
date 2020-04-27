@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EndlessTerrain : MonoBehaviour
 {
-    const float scale = 5f;
+    
     const float viewerUpdateThresholdDst = 25f;//set a threshold update distance so the map does noy have to update per frame, but instead update when player moves 
     const float sqrViewerUpdateThresholdDst = viewerUpdateThresholdDst * viewerUpdateThresholdDst;
     public LODInfo[] detailLevels;
@@ -24,7 +24,7 @@ public class EndlessTerrain : MonoBehaviour
     {
         mapGenerator = FindObjectOfType<MapGenerator>();
         MaxViewDest = detailLevels[detailLevels.Length-1].visibleDstThreshold;
-        chunkSize = MapGenerator.mapChunkSize - 1;
+        chunkSize = mapGenerator.mapChunkSize - 1;
         chunkVisibleInViewDst = Mathf.RoundToInt(MaxViewDest / chunkSize);
         viewPositionOld = viewPosition;//get the beginning posiiton of the player move
         UpdateVisibleChunks();//get the first one to be drawn
@@ -32,7 +32,7 @@ public class EndlessTerrain : MonoBehaviour
 
     private void Update()
     {
-        viewPosition = new Vector2(viewer.position.x, viewer.position.z) / scale;
+        viewPosition = new Vector2(viewer.position.x, viewer.position.z) / mapGenerator.terrainData.uniformScale;
         if((viewPositionOld - viewPosition).sqrMagnitude > sqrViewerUpdateThresholdDst) {
             viewPositionOld = viewPosition;//update the previous position for the next calculation
             UpdateVisibleChunks();
@@ -89,7 +89,7 @@ public class EndlessTerrain : MonoBehaviour
         {
             position = coord * size;
             bounds = new Bounds(position, Vector2.one * size);
-            Vector3 positionV3 = new Vector3(position.x, 0, position.y) * scale;
+            Vector3 positionV3 = new Vector3(position.x, 0, position.y) * mapGenerator.terrainData.uniformScale;
             this.detaillevels = detaillevels;
             //meshObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
             meshObject = new GameObject("Terrain Block");
@@ -97,7 +97,7 @@ public class EndlessTerrain : MonoBehaviour
             meshFilter = meshObject.AddComponent<MeshFilter>();
             meshCollider = meshObject.AddComponent<MeshCollider>();
             meshObject.transform.position = positionV3;
-            meshObject.transform.localScale = Vector3.one * scale;
+            meshObject.transform.localScale = Vector3.one * mapGenerator.terrainData.uniformScale;
             meshRenderer.material = material;
 
             //meshObject.transform.localScale = Vector3.one * size/10f;
@@ -129,8 +129,6 @@ public class EndlessTerrain : MonoBehaviour
             mapDataReceived = true;
             UpdateTerrainChunk();
 
-            Texture2D texture = TextureGenerator.textureFromColorMap(mapData.colorMap, MapGenerator.mapChunkSize, MapGenerator.mapChunkSize);
-            meshRenderer.material.mainTexture = texture;
         }
 
         public void UpdateTerrainChunk()

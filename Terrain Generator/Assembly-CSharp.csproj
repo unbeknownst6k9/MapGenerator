@@ -64,6 +64,10 @@
   <ItemGroup>
     <Compile Include="Assets\Script\CameraMovement.cs" />
     <Compile Include="Assets\Script\TerrainGen.cs" />
+    <Compile Include="Assets\Script\tutorial\Data\NoiseData.cs" />
+    <Compile Include="Assets\Script\tutorial\Data\TerrainData.cs" />
+    <Compile Include="Assets\Script\tutorial\Data\TextureData.cs" />
+    <Compile Include="Assets\Script\tutorial\Data\UpdatableData.cs" />
     <Compile Include="Assets\Script\tutorial\EndlessTerrain.cs" />
     <Compile Include="Assets\Script\tutorial\FallOffGenerator.cs" />
     <Compile Include="Assets\Script\tutorial\MapDisplay.cs" />
@@ -73,6 +77,7 @@
     <Compile Include="Assets\Script\tutorial\Noise.cs" />
     <Compile Include="Assets\Script\tutorial\OnPlayMode.cs" />
     <Compile Include="Assets\Script\tutorial\TextureGenerator.cs" />
+    <Compile Include="Assets\Script\tutorial\UpdatableDataEditor.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

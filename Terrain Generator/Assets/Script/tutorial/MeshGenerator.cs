@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class MeshGenerator
 {
-    public static MeshData generateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve meshHeightCurve, int levelDetail, bool useFallOff)
+    public static MeshData generateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve meshHeightCurve, int levelDetail)
     {
         AnimationCurve reference = new AnimationCurve(meshHeightCurve.keys);
         int simplificationIncrement = (levelDetail == 0 ? 1 : levelDetail * 2);
