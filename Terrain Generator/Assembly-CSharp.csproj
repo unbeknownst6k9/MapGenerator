@@ -78,6 +78,7 @@
     <Compile Include="Assets\Script\tutorial\OnPlayMode.cs" />
     <Compile Include="Assets\Script\tutorial\TextureGenerator.cs" />
     <Compile Include="Assets\Script\tutorial\UpdatableDataEditor.cs" />
+    <None Include="Assets\Script\tutorial\TerrainShader.shader" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

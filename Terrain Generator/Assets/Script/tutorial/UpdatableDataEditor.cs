@@ -16,6 +16,7 @@ public class UpdatableDataEditor : Editor
         if (GUILayout.Button("create"))
         {
             data.NotifiedOfUpdateValue();
+            EditorUtility.SetDirty(target);
         }
     }
 }

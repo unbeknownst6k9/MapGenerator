@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoUpdate: 1
   uniformScale: 10.75
-  useFallOff: 1
-  meshHeight: 52.4
+  useFallOff: 0
+  meshHeight: 72.02
   meshHeightCurve:
     serializedVersion: 2
     m_Curve:
