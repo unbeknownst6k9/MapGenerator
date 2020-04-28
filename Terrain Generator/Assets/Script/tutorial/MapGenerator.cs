@@ -14,9 +14,10 @@ public class MapGenerator : MonoBehaviour
     public TextureData textureData;
     public Material terrainMaterial;
 
-    public int mapChunkSize = 239;
-    [Range(0,6)]
+    [Range(0,MeshGenerator.numOfSupportedLOD-1)]
     public int previewLevelOfDetail;
+    [Range(0,MeshGenerator.supportedBlockSize-1)]
+    public int blockSizeIndex;
 
     public bool autoUpdate;
     
@@ -24,6 +25,20 @@ public class MapGenerator : MonoBehaviour
 
     Queue<MapThreadInfo<MapData>> mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
     Queue<MapThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<MapThreadInfo<MeshData>>();
+
+    private void Awake()
+    {
+        textureData.ApplyToMaterial(terrainMaterial);
+        textureData.UpdateMeshHeight(terrainMaterial, terrainData.minHeight, terrainData.maxHeight);
+    }
+
+    public int mapChunkSize
+    {
+        get
+        {
+            return MeshGenerator.supportedSizes[blockSizeIndex]-1;
+        }
+    }
 
     void OnValueUpdated()
     {
@@ -40,6 +55,9 @@ public class MapGenerator : MonoBehaviour
 
     public void DrawMapEditor()
     {
+        //value might not be correct if we apply the falloffmap because it might falten down the highest point
+        textureData.UpdateMeshHeight(terrainMaterial, terrainData.minHeight, terrainData.maxHeight);
+
         MapData mapData = generateMapData(Vector2.zero);
         MapDisplay mapDisplay = FindObjectOfType<MapDisplay>();
         if (drawMode == DrawMode.noiseMap)
@@ -138,8 +156,7 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
-        //value might not be correct if we apply the falloffmap because it might falten down the highest point
-        textureData.UpdateMeshHeight(terrainMaterial, terrainData.minHeight, terrainData.maxHeight);
+        
         return new MapData(noiseMap);
     }
 

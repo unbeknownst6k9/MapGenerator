@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: NoiseDataNoSea
   m_EditorClassIdentifier: 
   autoUpdate: 1
-  normalizeMode: 0
+  normalizeMode: 1
   noiseScale: 60
   octave: 3
   persistent: 0.253
   lacunarity: 3.26
-  seed: 8
+  seed: 12
   offSet: {x: 677.9, y: 0}

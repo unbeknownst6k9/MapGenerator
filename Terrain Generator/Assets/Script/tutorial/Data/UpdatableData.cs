@@ -8,6 +8,9 @@ public class UpdatableData : ScriptableObject
     public bool autoUpdate;
     /*to avoid only the onValidate method being called in NoiseData class add protected virtual in front,
       and add protected override for the onValidate method in NoiseData class so that the method is called correctly*/
+    /*unity build will fail if you use unityeditor name space outside of editor class*/
+
+#if UNITY_EDITOR
     protected virtual void OnValidate()
     {
         if (autoUpdate)
@@ -25,4 +28,5 @@ public class UpdatableData : ScriptableObject
             OnValueUpdated();
         }
     }
+#endif
 }

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public static class MeshGenerator
 {
+    public const int numOfSupportedLOD = 5;
+    public const int supportedBlockSize = 9;
+    public static readonly int[] supportedSizes = { 48, 72, 96, 120, 144, 168, 196, 216, 240 };
     public static MeshData generateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve meshHeightCurve, int levelDetail)
     {
         AnimationCurve reference = new AnimationCurve(meshHeightCurve.keys);
