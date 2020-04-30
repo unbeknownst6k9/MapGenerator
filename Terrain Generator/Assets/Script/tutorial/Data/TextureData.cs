@@ -29,7 +29,8 @@ public class TextureData : UpdatableData
         savedMinHeight = minHeight;
         savedMaxHeight = maxHeight;
         material.SetFloat("minHeight", savedMinHeight);
-        material.SetFloat("maxHeight", savedMaxHeight);
+        material.SetFloat("maxHeight", savedMaxHeight + 10f);
+        //Debug.Log("texture height is"+(savedMaxHeight + 10f));//46.9
         material.SetInt("layerCount", layers.Length);
         material.SetColorArray("baseColor", layers.Select(x => x.tint).ToArray());
         material.SetFloatArray("baseStartHeight", layers.Select(x=> x.startHeight).ToArray());

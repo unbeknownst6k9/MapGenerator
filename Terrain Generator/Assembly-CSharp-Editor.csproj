@@ -62,7 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Editor\MapGeneratorEditor.cs" />
+    <Compile Include="Assets\Editor\MapPreviewEditor.cs" />
     <Compile Include="Assets\Editor\UpdatableDataEditor.cs" />
     <Reference Include="UnityEditor.TestRunner">
       <HintPath>D:/GitHub/MapGenerator/Terrain Generator/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>

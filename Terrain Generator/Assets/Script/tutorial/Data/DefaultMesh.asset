@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: DefaultMesh
   m_EditorClassIdentifier: 
   autoUpdate: 1
-  blockSizeIndex: 2
-  meshScale: 5
+  blockSizeIndex: 8
+  meshScale: 1

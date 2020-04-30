@@ -15,7 +15,7 @@ public class HeightMapSetting : UpdatableData
     {
         get
         {
-            return heightMultiplier * heightCurve.Evaluate(0);
+            return heightMultiplier * heightCurve.Evaluate(0) * noiseSettings.minNoiseHeight;
         }
     }
 
@@ -27,6 +27,7 @@ public class HeightMapSetting : UpdatableData
         }
     }
 
+    //     
 #if UNITY_EDITOR
     protected override void OnValidate()
     {
