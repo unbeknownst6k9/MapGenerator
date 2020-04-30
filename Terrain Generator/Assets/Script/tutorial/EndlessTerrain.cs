@@ -17,7 +17,7 @@ public class EndlessTerrain : MonoBehaviour
     public static Vector2 viewPosition;
     private Vector2 viewPositionOld;
     static MapGenerator mapGenerator;
-    int chunkSize;
+    float meshWorldSize;
     int chunkVisibleInViewDst;
 
     Dictionary<Vector2, TerrainBlock> terrainBlockDictionary = new Dictionary<Vector2, TerrainBlock>();
@@ -27,15 +27,15 @@ public class EndlessTerrain : MonoBehaviour
     {
         mapGenerator = FindObjectOfType<MapGenerator>();
         MaxViewDest = detailLevels[detailLevels.Length-1].visibleDstThreshold;
-        chunkSize = mapGenerator.mapChunkSize - 1;
-        chunkVisibleInViewDst = Mathf.RoundToInt(MaxViewDest / chunkSize);
+        meshWorldSize = mapGenerator.meshSettings.meshWorldSize - 1;
+        chunkVisibleInViewDst = Mathf.RoundToInt(MaxViewDest / meshWorldSize);
         viewPositionOld = viewPosition;//get the beginning posiiton of the player move
         UpdateVisibleChunks();//get the first one to be drawn
     }
 
     private void Update()
     {
-        viewPosition = new Vector2(viewer.position.x, viewer.position.z) / mapGenerator.terrainData.uniformScale;
+        viewPosition = new Vector2(viewer.position.x, viewer.position.z);
         if(viewPosition != viewPositionOld)
         {
             foreach(TerrainBlock block in terrainBlocksVisibleListUpdate)
@@ -60,8 +60,8 @@ public class EndlessTerrain : MonoBehaviour
         }
 
         //terrainBlocksVisibleListUpdate.Clear();
-        int currentCoorX = Mathf.RoundToInt(viewPosition.x / chunkSize);
-        int currentCoorY = Mathf.RoundToInt(viewPosition.y / chunkSize);
+        int currentCoorX = Mathf.RoundToInt(viewPosition.x / meshWorldSize);
+        int currentCoorY = Mathf.RoundToInt(viewPosition.y / meshWorldSize);
 
         for (int yOffSet = -chunkVisibleInViewDst; yOffSet <= chunkVisibleInViewDst; yOffSet++)
         {
@@ -78,7 +78,7 @@ public class EndlessTerrain : MonoBehaviour
                     }
                     else
                     {
-                        terrainBlockDictionary.Add(viewedChunkCoor, new TerrainBlock(viewedChunkCoor, chunkSize, detailLevels, colliderLODIndex, transform, mapMaterial));
+                        terrainBlockDictionary.Add(viewedChunkCoor, new TerrainBlock(viewedChunkCoor, meshWorldSize, detailLevels, colliderLODIndex, transform, mapMaterial));
                     }
                 }
             }
@@ -89,7 +89,7 @@ public class EndlessTerrain : MonoBehaviour
     {
         public Vector2 coord;
         GameObject meshObject;
-        Vector2 position;
+        Vector2 sampleCentre;
         Bounds bounds;
         MeshRenderer meshRenderer;
         MeshFilter meshFilter;
@@ -97,29 +97,28 @@ public class EndlessTerrain : MonoBehaviour
         LODInfo[] detaillevels;
         LODMesh[] lodMeshes;
         int colliderLODInd;
-        MapData mapData;
+        HeightMap mapData;
         bool mapDataReceived;
         int previousLODIndex = -1;
         bool hasSetCollider;
 
-        public TerrainBlock(Vector2 coord, int size, LODInfo[] detaillevels, int colliderLODIndex, Transform parent, Material material)
+        public TerrainBlock(Vector2 coord, float meshWorldSize, LODInfo[] detaillevels, int colliderLODIndex, Transform parent, Material material)
         {
             this.coord = coord;
             colliderLODInd = colliderLODIndex;
-            position = coord * size;
-            bounds = new Bounds(position, Vector2.one * size);
-            Vector3 positionV3 = new Vector3(position.x, 0, position.y) * mapGenerator.terrainData.uniformScale;
+            sampleCentre = coord * meshWorldSize / mapGenerator.meshSettings.meshScale;
+            Vector2 position = coord * meshWorldSize;
+            bounds = new Bounds(position, Vector2.one * meshWorldSize);
+
             this.detaillevels = detaillevels;
-            //meshObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
             meshObject = new GameObject("Terrain Block");
             meshRenderer = meshObject.AddComponent<MeshRenderer>();
             meshFilter = meshObject.AddComponent<MeshFilter>();
             meshCollider = meshObject.AddComponent<MeshCollider>();
-            meshObject.transform.position = positionV3;
-            meshObject.transform.localScale = Vector3.one * mapGenerator.terrainData.uniformScale;
+
+            meshObject.transform.position = new Vector3(position.x , 0, position.y);
             meshRenderer.material = material;
 
-            //meshObject.transform.localScale = Vector3.one * size/10f;
             meshObject.transform.parent = parent;
             SetVisible(false);
             lodMeshes = new LODMesh[detaillevels.Length];
@@ -134,7 +133,7 @@ public class EndlessTerrain : MonoBehaviour
                 }
             }
 
-            mapGenerator.requestMapData(position, OnMapDataRecieved);
+            mapGenerator.requestheightMap(sampleCentre, OnMapDataRecieved);
         }
 
         void OnMeshDataRecieved(MeshData meshData)
@@ -142,7 +141,7 @@ public class EndlessTerrain : MonoBehaviour
             //meshFilter.mesh = meshData.createMesh();
         }
 
-        void OnMapDataRecieved(MapData mapData) {
+        void OnMapDataRecieved(HeightMap mapData) {
             //print("map data recieved!!");
             //mapGenerator.requestMeshData(OnMeshDataRecieved, mapData);
             this.mapData = mapData;
@@ -262,7 +261,7 @@ public class EndlessTerrain : MonoBehaviour
             UpdateCallBack();
         }
 
-        public void requestMesh (MapData mapData)
+        public void requestMesh (HeightMap mapData)
         {
             hasRequestedMesh = true;
             mapGenerator.requestMeshData(OnMeshDataRecieved, lod, mapData);
@@ -272,7 +271,7 @@ public class EndlessTerrain : MonoBehaviour
     [System.Serializable]
     public struct LODInfo
     {
-        [Range(0,MeshGenerator.numOfSupportedLOD-1)]
+        [Range(0,MeshSettings.numOfSupportedLOD-1)]
         public int lod;
         public float visibleDstThreshold;
         //public bool useForCollider;

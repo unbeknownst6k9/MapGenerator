@@ -65,12 +65,13 @@
     <Compile Include="Assets\Script\CameraMovement.cs" />
     <Compile Include="Assets\Script\ExitButton.cs" />
     <Compile Include="Assets\Script\TerrainGen.cs" />
-    <Compile Include="Assets\Script\tutorial\Data\NoiseData.cs" />
-    <Compile Include="Assets\Script\tutorial\Data\TerrainData.cs" />
+    <Compile Include="Assets\Script\tutorial\Data\HeightMapSetting.cs" />
+    <Compile Include="Assets\Script\tutorial\Data\MeshSettings.cs" />
     <Compile Include="Assets\Script\tutorial\Data\TextureData.cs" />
     <Compile Include="Assets\Script\tutorial\Data\UpdatableData.cs" />
     <Compile Include="Assets\Script\tutorial\EndlessTerrain.cs" />
     <Compile Include="Assets\Script\tutorial\FallOffGenerator.cs" />
+    <Compile Include="Assets\Script\tutorial\HeightMapGenerator.cs" />
     <Compile Include="Assets\Script\tutorial\MapDisplay.cs" />
     <Compile Include="Assets\Script\tutorial\MapGenerator.cs" />
     <Compile Include="Assets\Script\tutorial\MeshGenerator.cs" />

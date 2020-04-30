@@ -4,12 +4,9 @@ using UnityEngine;
 
 public static class MeshGenerator
 {
-    public const int numOfSupportedLOD = 5;
-    public const int supportedBlockSize = 9;
-    public static readonly int[] supportedSizes = { 48, 72, 96, 120, 144, 168, 196, 216, 240 };
-    public static MeshData generateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve meshHeightCurve, int levelDetail)
+
+    public static MeshData generateTerrainMesh(float[,] heightMap, MeshSettings meshSettings, int levelDetail)
     {
-        AnimationCurve reference = new AnimationCurve(meshHeightCurve.keys);
         int simplificationIncrement = (levelDetail == 0 ? 1 : levelDetail * 2);
         int borderedSize = heightMap.GetLength(0);
         //int borderedSize = heightMap.GetLength(1);
@@ -55,8 +52,8 @@ public static class MeshGenerator
                 int vertexIndex = vertexIndicesMap[x, y];
 
                 Vector2 percent = new Vector2((x - simplificationIncrement) / (float)meshSize, (y - simplificationIncrement) / (float)meshSize);
-                float height = reference.Evaluate(heightMap[x, y]) * heightMultiplier;//this defines the height of all vertices
-                Vector3 vertexPosition = new Vector3((topLeftX + percent.x * meshSizeUnsimplifies), height, (topLeftZ - percent.y * meshSizeUnsimplifies));
+                float height = heightMap[x, y];//this defines the height of all vertices
+                Vector3 vertexPosition = new Vector3((topLeftX + percent.x * meshSizeUnsimplifies) * meshSettings.meshScale, height, (topLeftZ - percent.y * meshSizeUnsimplifies) * meshSettings.meshScale);
 
                 meshData.addVertex(vertexPosition, percent, vertexIndex);
                 if(x < borderedSize-1 && y < borderedSize - 1)
@@ -69,7 +66,6 @@ public static class MeshGenerator
                     meshData.addTriangles(a,d,c);
                     meshData.addTriangles(d,a,b);
                 }
-;               //vertexIndex++;
             }
         }
         meshData.BakeNormals();
