@@ -5,9 +5,10 @@ using UnityEngine;
 public static class Noise 
 {
     public enum NormalizeMode {Local, Global};
-    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, NoiseSetting settings, Vector2 sampleCentre)
+    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, NoiseSetting settings, Vector2 sampleCentre, bool useFallOff)
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];
+        float[,] fallOfMap = FallOffGenerator.fallOffMap(mapWidth);
         System.Random prng = new System.Random(settings.seed);
         Vector2[] octaveOffSets = new Vector2[settings.octave];
         float maxPossibleHeight = 0;
@@ -51,8 +52,8 @@ public static class Noise
                     frequency *= settings.lacunarity;
                 }
 
-                noiseMap[x, y] = noiseHeight;
-
+                noiseMap[x, y] = (useFallOff)?noiseHeight - fallOfMap[x,y]:noiseHeight;
+                
                 if (settings.normalizeMode == NormalizeMode.Global)
                 {
                     noiseHeight = (noiseMap[x, y] + 1) / (maxPossibleHeight/0.9f);

@@ -24,7 +24,7 @@ MonoBehaviour:
     minNoiseHeight: -0.1022372
     maxNoiseHeight: 1.2649963
   useFallOff: 0
-  heightMultiplier: 50.06
+  heightMultiplier: 35.07
   heightCurve:
     serializedVersion: 2
     m_Curve:

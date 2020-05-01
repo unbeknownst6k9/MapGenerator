@@ -18,7 +18,7 @@ public class MeshSettings : UpdatableData
     {
         get
         {
-            return supportedSizes[blockSizeIndex] + 1;
+            return supportedSizes[blockSizeIndex] + 5;
         }
     }
 
